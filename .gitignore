@@ -1,0 +1,11 @@
+pkg/
+Gemfile.lock
+.bundle/
+.rspec_system/
+.*.sw*
+/spec/fixtures/.librarian
+/spec/fixtures/.tmp
+/spec/fixtures/Puppetfile.lock
+/spec/fixtures/modules
+/spec/fixtures/manifests
+/spec/fixtures/vendor

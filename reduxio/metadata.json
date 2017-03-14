@@ -1,0 +1,15 @@
+{
+  "name": "rdxdev-reduxio",
+  "version": "1.0.5",
+  "author": "rdxdev",
+  "summary": "Manage Reduxio storage resources.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/reduxio/puppet.git",
+  "project_page": "https://github.com/reduxio/puppet",
+  "issues_url": "https://github.com/reduxio/puppet/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
