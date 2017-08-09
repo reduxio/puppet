@@ -12,16 +12,19 @@ Puppet::Type.type(:reduxio_host).provide(:posix,
 
 
     def self.list_instances(conn_info = nil)
-        get_api([conn_info]).transport.list_hosts.each.collect do |vol|
-            new(cli_host_to_puppet_host(vol))
+        get_api([conn_info]).transport.list_hosts.each.collect do |host|
+            new(rest_host_to_puppet_host(host))
         end
     end
 
 
-    def self.cli_host_to_puppet_host(cli_host)
+    def self.rest_host_to_puppet_host(rest_host)
         return {
-            :name               => cli_host["name"],
-            :description        => cli_host["description"],
+            :name               => rest_host["name"],
+            :hg_id              => rest_host["hostgroup_id"],
+            :iscsi_name         => rest_host["iscsi_name"],
+            :description        => rest_host["description"],
+            :user_chap          => rest_host["user_chap"],
             :ensure             => :present
         }
     end
@@ -42,13 +45,16 @@ Puppet::Type.type(:reduxio_host).provide(:posix,
     def set_host
         host = transport(conn_info).find_host_by_name(@resource[:name])
         if @property_flush[:ensure] == :absent
+            Puppet.debug("Deleting host: #{@resource[:name]}")
             transport(conn_info).delete_host(@resource[:name])
             return nil
         else
             if host
                 transport(conn_info).update_host(
-                    name=@resource[:name],
-                    nil,
+                    name=host["name"],
+                    hg_id=@resource[:hg_id],
+                    user_chap=@resource[:user_chap],
+                    password_chap=@resource[:password_chap],
                     description=@resource[:description]
                 )
             else
@@ -57,6 +63,9 @@ Puppet::Type.type(:reduxio_host).provide(:posix,
                 transport(conn_info).create_host(
                     name=@resource[:name],
                     iscsi_name=iscsi_name,
+                    hg_id=@resource[:hg_id],
+                    user_chap=@resource[:user_chap],
+                    password_chap=@resource[:password_chap],
                     description=@resource[:description]
                 )
             end
@@ -66,7 +75,7 @@ Puppet::Type.type(:reduxio_host).provide(:posix,
 
     def flush
         if set_host
-            @property_hash = self.class.cli_host_to_puppet_host(transport(conn_info).find_host_by_name(@resource[:name]))
+            @property_hash = self.class.rest_host_to_puppet_host(transport(conn_info).find_host_by_name(@resource[:name]))
         end
     end
 

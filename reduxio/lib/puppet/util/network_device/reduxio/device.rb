@@ -12,11 +12,10 @@ class Puppet::Util::NetworkDevice::Reduxio::Device
   def initialize(url, other = nil)
     Puppet.debug("Reduxio network device initialized with url: #{url}, other: #{other}")
   	@url = URI.parse(url)
-    raise ArgumentError, "#{ARG_ERROR_PREFIX} Invalid scheme #{@url.scheme}. Must be ssh" 	unless @url.scheme == 'ssh'
-    raise ArgumentError, "#{ARG_ERROR_PREFIX} no user specified" 				unless @url.user
-    raise ArgumentError, "#{ARG_ERROR_PREFIX} no password specified" 		unless @url.password
+    raise ArgumentError, "#{ARG_ERROR_PREFIX} Invalid scheme #{@url.scheme}. Must be https" 	unless @url.scheme == 'https'
+    raise ArgumentError, "#{ARG_ERROR_PREFIX} no auth token specified" 				unless @url.user
     Puppet.debug("Reduxio network deviced called with host '#{@url.host}'")
-    @transport = RdxCliAPI.new(@url.host, @url.user, @url.password)
+    @transport = RdxCliAPI.new(@url.host, @url.user)
   end
 
 

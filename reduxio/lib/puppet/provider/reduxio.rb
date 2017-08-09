@@ -82,10 +82,4 @@ class Puppet::Provider::Reduxio < Puppet::Provider
     return nil
   end
 
-
-
-
-
-
-
 end
