@@ -141,6 +141,7 @@ class RdxCliAPI
                     'value' => size
                 },
                 'history_policy_id' => history_policy_obj["id"],
+                'block_size' => blocksize,
                 'description' => description
             }.to_json)
         else
@@ -150,6 +151,7 @@ class RdxCliAPI
                     'unit'  => 'GB',
                     'value' => size
                 },
+                'block_size' => blocksize,
                 'description' => description
             }.to_json)
         end
