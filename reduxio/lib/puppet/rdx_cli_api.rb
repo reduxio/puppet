@@ -192,7 +192,7 @@ class RdxCliAPI
         host = find_host_by_name(name)
 
         if hg_id != nil
-            found_hg = find_hg_by_hg_name(hg_id)
+            found_hg = find_hg_by_name(hg_id)
             if found_hg != nil
                 send_rest_cmd(construct_url(HOSTGROUPS,found_hg["id"].to_s,HOSTS,host["id"].to_s),HTTP_POST,{}.to_json)
             end
@@ -210,13 +210,6 @@ class RdxCliAPI
             end
         end
 
-        return nil
-    end
-
-    def find_hg_by_hg_name(hg_name)
-        list_hgs.each do |hg|
-            return hg if hg["name"] == hg_name
-        end
         return nil
     end
 
@@ -240,7 +233,7 @@ class RdxCliAPI
             'description' => description
             }.to_json)
 
-        hg = find_hg_by_hg_name(hg_id)
+        hg = find_hg_by_name(hg_id)
         if hg != nil
             if host["hostgroup_id"] !=  hg["id"]
                 delete_hg_to_host_assignment(name)
