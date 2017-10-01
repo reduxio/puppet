@@ -61,7 +61,7 @@ reduxio_volume_to_host_assignmnet {'vol1/host':
   ensure          => 'present'
 }
 
-# Alternative way to define an assignmnet. The title in this case will not have any functional affect on the 
+# Alternative way to define an assignment. The title in this case will not have any functional affect on the 
 # Reduxio assignmnet. 
 reduxio_volume_to_host_assignmnet {'second_assignment':
   ensure          => 'present',
@@ -69,10 +69,18 @@ reduxio_volume_to_host_assignmnet {'second_assignment':
   host            => 'host'
 }
 
+# The way to define volume to hostgroup (hg) assignment is in the entity title
+reduxio_volume_to_host_assignmnet {'vol1/hg1':
+  ensure          => 'present'
+}
+
 # Recommended entities execution order
-Reduxio_volume <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |>
+Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |> -> Reduxio_volume_to_hg_assignmnet <| |>
 
 ```
+
+### Updating objects
+Updating objects' attributes is supported, however as names are the unique identifiers of objects, changing objects names is not possible. 
 
 ### Network Device
 The Reduxio Puppet module can act as a network device. Example `device.conf` file, which should reside in a node which shall
