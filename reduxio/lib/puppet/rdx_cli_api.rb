@@ -194,7 +194,7 @@ class RdxCliAPI
         if hg_id != nil
             found_hg = find_hg_by_hg_name(hg_id)
             if found_hg != nil
-                send_rest_cmd(construct_url(HOSTGROUPS,found_hg.to_s,HOSTS,host["id"].to_s),HTTP_POST,{}.to_json)
+                send_rest_cmd(construct_url(HOSTGROUPS,found_hg["id"].to_s,HOSTS,host["id"].to_s),HTTP_POST,{}.to_json)
             end
         end
     end
@@ -254,7 +254,8 @@ class RdxCliAPI
     def assign(vol_name, host_name=nil, hostgroup_name=nil, lun=nil)
         send_rest_cmd(ASSIGNMENTS,HTTP_POST,{
             'volume_id' => vol_name,
-            'host_id' => host_name
+            'host_id' => host_name,
+            'hostgroup_id' => hostgroup_name
             }.to_json)
     end
 
@@ -290,15 +291,25 @@ class RdxCliAPI
     def unassign(vol_name, host_name=nil, hostgroup_name=nil)
         send_rest_cmd(ASSIGNMENTS,HTTP_DELETE,{
             'volume_id' => vol_name,
-            'host_id' => host_name
+            'host_id' => host_name,
+            'hostgroup_id' => hostgroup_name
             }.to_json)
     end
-
-    def find_assignment(vol_name, host_name)
+    
+    def find_assignment_by_host(vol_name, host_name)
         vol = find_volume_by_name(vol_name)
         host = find_host_by_name(host_name)
         list_assignments.each do |assgn|
             return assgn if assgn["volume_id"] == vol["id"] && assgn["host_id"] == host["id"]
+        end
+        return nil
+    end
+    
+    def find_assignment_by_hostgroup(vol_name, hostgroup_name)
+        vol = find_volume_by_name(vol_name)
+        hostgroup = find_hg_by_name(hostgroup_name)
+        list_assignments.each do |assgn|
+            return assgn if assgn["volume_id"] == vol["id"] && assgn["hostgroup_id"] == hostgroup["id"]
         end
         return nil
     end
