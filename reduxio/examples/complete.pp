@@ -31,16 +31,16 @@ reduxio_host { 'host':
 }
 
 # The most recommended way to define an assignment in the entity title: <vol_name>/<host_name>
-reduxio_volume_to_host_assignmnet {'vol1/host':
+reduxio_volume_to_host_assignment {'vol1/host':
   ensure          => 'present'
 }
 
-# Alternative way to define an assignmnet
-reduxio_volume_to_host_assignmnet {'second_assignment':
+# Alternative way to define an assignment
+reduxio_volume_to_host_assignment {'second_assignment':
   ensure          => 'present',
   volume          => 'vol2',
   host            => 'host'
 }
 
 # Recommended entities execution order
-Reduxio_volume <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |>
+Reduxio_volume <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignment <| |>

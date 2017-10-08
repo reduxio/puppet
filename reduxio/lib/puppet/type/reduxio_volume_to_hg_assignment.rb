@@ -1,5 +1,5 @@
-Puppet::Type.newtype(:reduxio_volume_to_host_assignmnet) do
-    @doc = 'Manage volume assignments to host on Reduxio storage'
+Puppet::Type.newtype(:reduxio_volume_to_hg_assignment) do
+    @doc = 'Manage volume assignments to hostgroup on Reduxio storage'
 
     apply_to_all
     ensurable
@@ -10,7 +10,7 @@ Puppet::Type.newtype(:reduxio_volume_to_host_assignmnet) do
                 /^(.*)\/(.*)$/,
                 [
                     [:volume, lambda{|x| x} ],
-                    [:host,   lambda{|x| x} ]
+                    [:hg,   lambda{|x| x} ]
                 ]
             ],
             [
@@ -23,19 +23,18 @@ Puppet::Type.newtype(:reduxio_volume_to_host_assignmnet) do
     end
 
     def name
-        "#{self[:volume]}/#{self[:host]}"
+        "#{self[:volume]}/#{self[:hg]}"
     end
 
 
     newparam(:volume, :namevar => true) do
-        desc 'The volume name to assign the host to'
+        desc 'The volume name to assign the hostgroup to'
     end
 
-    newparam(:host, :namevar => true) do
-        desc 'The host name to assign the volume to'
+    newparam(:hg, :namevar => true) do
+      desc 'The hostgroup name to assign the volume to'
     end
-
-
+    
     newparam(:lun) do
         desc 'Explicitly determine the assignment LUN. Leave empty to have automatically assigned LUN'
     end

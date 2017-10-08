@@ -80,26 +80,26 @@ reduxio_host { 'host':
 }
 
 # The most recommended way to define a volume to host assignment is in the entity title: <vol_name>/<host_name>.
-reduxio_volume_to_host_assignmnet {'vol1/host':
+reduxio_volume_to_host_assignment {'vol1/host':
   ensure          => 'present'
 }
 
 # Alternative way to define a volume to host assignment. 
 # The title in this case will not have any functional affect on the Reduxio assignment. 
-reduxio_volume_to_host_assignmnet {'second_host_assignment':
+reduxio_volume_to_host_assignment {'second_host_assignment':
   ensure          => 'present',
   volume          => 'vol2',
   host            => 'host'
 }
 
 # The most recommended way to define a volume to host assignment is in the entity title: <vol_name>/<hostgroup_name>.
-reduxio_volume_to_hg_assignmnet {'vol3/hg1':
+reduxio_volume_to_hg_assignment {'vol3/hg1':
   ensure          => 'present'
 }
 
 # Alternative way to define a volume to hostgroup assignment. 
 # The title in this case will not have any functional affect on the Reduxio assignment. 
-reduxio_volume_to_hg_assignmnet {'second_hg_assignment':
+reduxio_volume_to_hg_assignment {'second_hg_assignment':
   ensure          => 'present',
   volume          => 'vol3',
   host            => 'host'
@@ -107,7 +107,7 @@ reduxio_volume_to_hg_assignmnet {'second_hg_assignment':
 
 
 # Recommended entities execution order
-Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |> -> Reduxio_volume_to_hg_assignmnet <| |>
+Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignment <| |> -> Reduxio_volume_to_hg_assignment <| |>
 
 ```
 

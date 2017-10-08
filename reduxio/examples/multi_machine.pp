@@ -27,16 +27,16 @@ reduxio_host { 'orion_host':
 }
 
 
-reduxio_volume_to_host_assignmnet {'nitro/nitro_host':
+reduxio_volume_to_host_assignment {'nitro/nitro_host':
   ensure          => 'present',
   url             => 'ssh://rdxadmin:admin@nitro-mgmt'
 }
 
-reduxio_volume_to_host_assignmnet {'orion/orion_host':
+reduxio_volume_to_host_assignment {'orion/orion_host':
   ensure          => 'present',
   url             => 'ssh://rdxadmin:admin@orion-mgmt'
 }
 
 
 
-Reduxio_volume <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |>
+Reduxio_volume <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignment <| |>
