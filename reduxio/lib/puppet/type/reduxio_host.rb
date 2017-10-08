@@ -19,7 +19,7 @@ Puppet::Type.newtype(:reduxio_host) do
     desc 'hostgroup name'
   end
 
-  newparam(:iscsi_name) do
+  newproperty(:iscsi_name) do
     desc 'iSCSI name of the host. Leave empty to use the iSCSI name of the system which is executing the manifest (must have iscsi tools installed). This field, once the entity has been created created, is not updatable and will be ignored'
   end
 

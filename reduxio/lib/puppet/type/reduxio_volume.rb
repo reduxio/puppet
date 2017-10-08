@@ -24,7 +24,7 @@ Puppet::Type.newtype(:reduxio_volume) do
     desc 'History policy of the volume'
   end
 
-  newparam(:blocksize) do
+  newproperty(:blocksize) do
     desc 'Block size (sector size) of the volume (512 or 4096 bytes)'
     newvalues(/^\d+$/)
   end
