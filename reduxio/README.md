@@ -10,8 +10,8 @@ These should be configured manually or using another Puppet module.
 
 ## Requirements
 
-1. Reduxio HX Series system running Reduxio TimeOS v2.7 or higher.
-2. ['net-ssh' Ruby Gem](https://github.com/net-ssh/net-ssh "'net-ssh' Ruby Gem").
+1. Reduxio HX Series system running Reduxio TimeOS v3.3 or higher.
+2. ['rest-client' Ruby Gem](https://github.com/rest-client/rest-client "'rest-client' Ruby Gem").
 3. Puppet v3.6 or higher.
 
 ## Installation
