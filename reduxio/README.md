@@ -79,6 +79,10 @@ Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Redu
 
 ```
 
+### API TOKEN
+Pupppet plugin is using a reduxio generated API Token.
+In order to create, go to https://reduxio_system_address/#/app/settings/api-tokens.
+
 ### Updating objects
 Updating objects' attributes is supported, however as names are the unique identifiers of objects, changing objects names is not possible. 
 
@@ -89,7 +93,7 @@ be the proxy to the Reduxio system (aka proxy node):
  ```
  [devicename]
  type reduxio
- url ssh://login_username:login_password@reduxio_system_address
+ url https://api-token@reduxio_system_address
 ```
 
 The device name (or cert name) is unrelated to the agent node host name. Furthermore, it is recommended **not** to name
@@ -137,7 +141,7 @@ reduxio_volume { 'vol1':
   size            => 11,
   history_policy  => 'Critical-Apps',
   blocksize       => 512,
-  url             => 'ssh://login_username:login_password@reduxio1'
+  url             => 'https://api-token1@reduxio1'
 }
 
 reduxio_volume { 'vol2':
@@ -146,7 +150,7 @@ reduxio_volume { 'vol2':
   size            => 101,
   history_policy  => 'Critical-Apps',
   blocksize       => 512,
-  url             => 'ssh://login_username:login_password@reduxio2'
+  url             => 'https://api-token2@reduxio2'
 }
 ```
 
