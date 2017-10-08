@@ -292,6 +292,7 @@ class RdxCliAPI
     def find_assignment_by_host(vol_name, host_name)
         vol = find_volume_by_name(vol_name)
         host = find_host_by_name(host_name)
+        return nil if (host.nil?)
         list_assignments.each do |assgn|
             return assgn if assgn["volume_id"] == vol["id"] && assgn["host_id"] == host["id"]
         end
@@ -301,6 +302,7 @@ class RdxCliAPI
     def find_assignment_by_hostgroup(vol_name, hostgroup_name)
         vol = find_volume_by_name(vol_name)
         hostgroup = find_hg_by_name(hostgroup_name)
+        return nil if (hostgroup.nil?)
         list_assignments.each do |assgn|
             return assgn if assgn["volume_id"] == vol["id"] && assgn["hostgroup_id"] == hostgroup["id"]
         end
