@@ -24,6 +24,19 @@ Reduxio Puppet module can be used either as a network device or locally.
 
 ### Example Manifest
 ```
+
+reduxio_history_policy { 'Default-Apps':
+  ensure          => 'present',
+  is_default      => 'true',
+  seconds         => 86400,
+  hours           => 336,
+  days            => 14,
+  weeks           => 12,
+  months          => 12,
+  retention       => 12,
+}
+
+
 # The volume title is also the name of the volume that will be created on the Reduxio system.
 reduxio_volume { 'vol1':
   ensure          => 'present',
@@ -37,7 +50,7 @@ reduxio_volume { 'vol2':
   ensure          => 'present',
   description     => 'Volume creation with puppet',
   size            => 101,
-  history_policy  => 'Critical-Apps',
+  history_policy  => 'Default-Apps',
   blocksize       => 512
 }
 
@@ -45,8 +58,13 @@ reduxio_volume { 'vol3':
   ensure          => 'present',
   description     => 'Volume creation with puppet',
   size            => 100,
-  history_policy  => 'Critical-Apps',
-  blocksize       => 512
+  history_policy  => 'Bookmarks-Only',
+  blocksize       => 4096
+}
+
+reduxio_hg { 'hg1':
+  ensure          => 'present',
+  description     => 'Hostgroup created by puppet',
 }
 
 reduxio_host { 'host':
@@ -54,25 +72,39 @@ reduxio_host { 'host':
   # Omitting 'iscsi_name' field will create a host with iscsi_name as the agent that is executing the manifest.
   # Using this feature relies on the /etc/iscsi/initiatorname.iscsi file.
   iscsi_name      => 'iqn.2010-10.example'
+  hg_id           => 'hg1'
+  user_chap       => 'host_chap_user',
+  password_chap   => 'host_chap_password',
+  description     => 'host description',
+  
 }
 
-# The most recommended way to define an assignment is in the entity title: <vol_name>/<host_name>.
+# The most recommended way to define a volume to host assignment is in the entity title: <vol_name>/<host_name>.
 reduxio_volume_to_host_assignmnet {'vol1/host':
   ensure          => 'present'
 }
 
-# Alternative way to define an assignment. The title in this case will not have any functional affect on the 
-# Reduxio assignmnet. 
-reduxio_volume_to_host_assignmnet {'second_assignment':
+# Alternative way to define a volume to host assignment. 
+# The title in this case will not have any functional affect on the Reduxio assignment. 
+reduxio_volume_to_host_assignmnet {'second_host_assignment':
   ensure          => 'present',
   volume          => 'vol2',
   host            => 'host'
 }
 
-# The way to define volume to hostgroup (hg) assignment is in the entity title
-reduxio_volume_to_hg_assignmnet {'vol1/hg1':
+# The most recommended way to define a volume to host assignment is in the entity title: <vol_name>/<hostgroup_name>.
+reduxio_volume_to_hg_assignmnet {'vol3/hg1':
   ensure          => 'present'
 }
+
+# Alternative way to define a volume to hostgroup assignment. 
+# The title in this case will not have any functional affect on the Reduxio assignment. 
+reduxio_volume_to_hg_assignmnet {'second_hg_assignment':
+  ensure          => 'present',
+  volume          => 'vol3',
+  host            => 'host'
+}
+
 
 # Recommended entities execution order
 Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Reduxio_host <| |> -> Reduxio_volume_to_host_assignmnet <| |> -> Reduxio_volume_to_hg_assignmnet <| |>
