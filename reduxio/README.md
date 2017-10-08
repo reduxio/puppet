@@ -70,7 +70,7 @@ reduxio_volume_to_host_assignmnet {'second_assignment':
 }
 
 # The way to define volume to hostgroup (hg) assignment is in the entity title
-reduxio_volume_to_host_assignmnet {'vol1/hg1':
+reduxio_volume_to_hg_assignmnet {'vol1/hg1':
   ensure          => 'present'
 }
 
