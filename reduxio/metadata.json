@@ -1,6 +1,6 @@
 {
   "name": "rdxdev-reduxio",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "author": "rdxdev",
   "summary": "Manage Reduxio storage resources.",
   "license": "Apache-2.0",
