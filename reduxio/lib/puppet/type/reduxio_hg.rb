@@ -5,10 +5,7 @@ Puppet::Type.newtype(:reduxio_hg) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'The name of the host group (1-31 characters)'
-    validate do |value|
-      fail("Name too long #{value}") unless value.length.between?(1, 31)
-    end
+    desc 'The name of the host group'
   end
 
   newproperty(:description) do
