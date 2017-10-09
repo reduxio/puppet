@@ -5,13 +5,13 @@ The module enables the user to create, modify and update volumes, hosts and assi
 
 Note: This module does not automate the configuration of the iSCSI initiator. This
 includes the configuration of iSCSI sessions, but also the Reduxio iSCSI best practices
-documented in the [Reduxio Support Portal](https://support.reduxio.com "Reduxio Support Portal").
+documented in the [Reduxio Support Portal] (https://support.reduxio.com "Reduxio Support Portal").
 These should be configured manually or using another Puppet module.
 
 ## Requirements
 
 1. Reduxio HX Series system running Reduxio TimeOS v3.3 or higher.
-2. ['rest-client' Ruby Gem](https://github.com/rest-client/rest-client "'rest-client' Ruby Gem").
+2. ['rest-client' Ruby Gem] (https://github.com/rest-client/rest-client "'rest-client' Ruby Gem").
 3. Puppet v3.6 or higher.
 
 ## Installation
@@ -85,7 +85,7 @@ reduxio_volume_to_host_assignment {'vol1/host':
 }
 
 # Alternative way to define a volume to host assignment. 
-# The title in this case will not have any functional affect on the Reduxio assignment. 
+# The title in this case will not have any functional effect on the Reduxio assignment. 
 reduxio_volume_to_host_assignment {'second_host_assignment':
   ensure          => 'present',
   volume          => 'vol2',
@@ -97,8 +97,8 @@ reduxio_volume_to_hg_assignment {'vol3/hg1':
   ensure          => 'present'
 }
 
-# Alternative way to define a volume to hostgroup assignment. 
-# The title in this case will not have any functional affect on the Reduxio assignment. 
+# Alternative way to define a volume to host group assignment. 
+# The title in this case will not have any functional effect on the Reduxio assignment. 
 reduxio_volume_to_hg_assignment {'second_hg_assignment':
   ensure          => 'present',
   volume          => 'vol3',
@@ -112,7 +112,7 @@ Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Redu
 ```
 
 ### API TOKEN
-Pupppet plugin is using a reduxio generated API Token.
+Puppet plugin is using a Reduxio generated API Token.
 In order to create, go to https://reduxio_system_address/#/app/settings/api-tokens.
 
 ### Updating objects
@@ -132,7 +132,7 @@ The device name (or cert name) is unrelated to the agent node host name. Further
 the devices as the proxy node host name, to avoid conflict in cases where the proxy node should act both as agent 
 and as a Reduxio network device(s) proxy. The device name is the certificate name that the puppet master (server) will 
 be authenticated with. If working with the same Reduxio system from multiple proxy nodes, make sure to name the devices
-in each node differently, if wishing to execute different manifests from the the proxy nodes on the same Reduxio system.
+in each node differently, if wishing to execute different manifests from the proxy nodes on the same Reduxio system.
 
 Once defining a device.conf file on the proxy node, you should also define the relative manifest to the network device
 on the puppet master node (usually in `site.pp` file):
@@ -149,7 +149,7 @@ on the puppet master node (usually in `site.pp` file):
     }
 ```
 
-To disptach the network device configuration, run the following on the proxy node:
+To dispatch the network device configuration, run the following on the proxy node:
 
 `shell> puppet device`
 
@@ -187,8 +187,8 @@ reduxio_volume { 'vol2':
 ```
 
 This will create two volumes: `vol1` on `reduxio1` machine, and `vol2` on `reduxio2` machine. When working with multiple
-machines, a title is unique per entitiy type, so one needs to explicitly define the `name` property when multiple entities
-with the same name should be created accross multiple Reduxio systems. 
+machines, a title is unique per entity type, so one needs to explicitly define the `name` property when multiple entities
+with the same name should be created across multiple Reduxio systems. 
 
 This approach can also be combined with the network device approach: Specifying the `url` attribute will override the 
 `device.conf` settings.
