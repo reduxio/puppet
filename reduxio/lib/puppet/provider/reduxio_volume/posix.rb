@@ -33,7 +33,7 @@ Puppet::Type.type(:reduxio_volume).provide(:posix,
         else
             volume = transport(conn_info).find_volume_by_name(@resource[:name])
             if volume
-                if (not @resource[:blocksize].nil?) && volume["block_size"] != @resource[:blocksize]
+                if (not @resource[:blocksize].nil?) && volume["block_size"].to_s != @resource[:blocksize].to_s
                   raise Puppet::Error, "Cannot update blocksize for volume '#{volume["name"]}', Blocksize is #{volume["block_size"]}, requested to update to #{@resource[:blocksize]}"
                 end
                 transport(conn_info).update_volume(

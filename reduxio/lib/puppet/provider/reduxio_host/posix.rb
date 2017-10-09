@@ -50,7 +50,7 @@ Puppet::Type.type(:reduxio_host).provide(:posix,
             return nil
         else
             if host
-                if (not @resource[:iscsi_name].nil?) && host["iscsi_name"] != @resource[:iscsi_name]
+                if (not @resource[:iscsi_name].nil?) && host["iscsi_name"].to_s != @resource[:iscsi_name].to_s
                   raise Puppet::Error, "Cannot update iscsi_name for host '#{host["iscsi_name"]}', iscsi_name is #{host["iscsi_name"]}, requested to update to #{@resource[:iscsi_name]}"
                 end
                 transport(conn_info).update_host(
