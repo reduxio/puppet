@@ -95,7 +95,28 @@ class RdxCliAPI
             return vol if vol["wwid"] == wwid
         end
     end
-
+    
+    def find_volume_name_by_id(volume_id, volumes) 
+      volumes.each do |vol|
+        return vol["name"] if vol["id"].to_s == volume_id.to_s
+      end
+      return nil
+    end
+    
+    def find_host_name_by_id(host_id, hosts) 
+      hosts.each do |host|
+        return host["name"] if host["id"].to_s == host_id.to_s
+      end
+      return nil
+    end
+    
+    def find_hg_name_by_id(hg_id, hgs)
+      hgs.each do |hg|
+        return hg["name"] if hg["id"].to_s == hg_id.to_s
+      end
+      return nil
+    end
+    
     def update_volume(name, description=nil, size=nil, history_policy=nil)
         vol = find_volume_by_name(name)
         history_policy_id = vol["history_policy_id"]
@@ -282,18 +303,19 @@ class RdxCliAPI
     end
 
     def unassign(vol_name, host_name=nil, hostgroup_name=nil)
-        send_rest_cmd(ASSIGNMENTS,HTTP_DELETE,{
-            'volume_id' => vol_name,
-            'host_id' => host_name,
-            'hostgroup_id' => hostgroup_name
-            }.to_json)
+        if host_name.nil?
+          host_url_match = "hostgroup_id=#{hostgroup_name}"
+        else
+          host_url_match = "host_id=#{host_name}"
+        end
+        send_rest_cmd(construct_url(ASSIGNMENTS,"?volume_id=#{vol_name}&#{host_url_match}"),HTTP_DELETE)
     end
     
     def find_assignment_by_host(vol_name, host_name)
         vol = find_volume_by_name(vol_name)
         host = find_host_by_name(host_name)
-        return nil if (host.nil?)
-        list_assignments.each do |assgn|
+        return nil if (host.nil? || vol.nil?)
+        list_volume_to_host_assignments.each do |assgn|
             return assgn if assgn["volume_id"] == vol["id"] && assgn["host_id"] == host["id"]
         end
         return nil
@@ -302,8 +324,8 @@ class RdxCliAPI
     def find_assignment_by_hostgroup(vol_name, hostgroup_name)
         vol = find_volume_by_name(vol_name)
         hostgroup = find_hg_by_name(hostgroup_name)
-        return nil if (hostgroup.nil?)
-        list_assignments.each do |assgn|
+        return nil if (hostgroup.nil? || vol.nil?)
+        list_volume_to_hg_assignments.each do |assgn|
             return assgn if assgn["volume_id"] == vol["id"] && assgn["hostgroup_id"] == hostgroup["id"]
         end
         return nil
@@ -312,7 +334,15 @@ class RdxCliAPI
     def list_assignments(vol=nil, host=nil, hg=nil)
         return send_rest_cmd(ASSIGNMENTS,HTTP_GET)
     end
-
+    
+    def list_volume_to_host_assignments(vol=nil, host=nil, hg=nil)
+        return list_assignments.reject{ |assign| assign["host_id"] == 0 }
+    end
+    
+    def list_volume_to_hg_assignments(vol=nil, host=nil, hg=nil) 
+        return list_assignments.reject{ |assign| assign["hostgroup_id"] == 0 }
+    end
+    
     def list_history_policies
         return send_rest_cmd(HISTORY_POLICIES,HTTP_GET)
     end

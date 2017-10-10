@@ -9,17 +9,22 @@ Puppet::Type.type(:reduxio_volume_to_hg_assignment).provide(:posix, :parent => P
     mk_resource_methods
 
     def self.list_instances(conn_info = nil)
-        get_api([conn_info]).transport.list_assignments.each.collect do |vol|
-            new(rest_asgn_to_puppet_asgn(vol))
+        transport = get_api([conn_info]).transport
+        volumes = transport.list_volumes
+        hgs = transport.list_hgs
+        transport.list_volume_to_hg_assignments.each.collect do |assgn|
+            puppet_assgn = rest_asgn_to_puppet_asgn(assgn, hgs, volumes, transport)
+            new(puppet_assgn)
         end
     end
 
-
-    def self.rest_asgn_to_puppet_asgn(rest_assign)
+    def self.rest_asgn_to_puppet_asgn(rest_assign, hgs, volumes, transport)
+        volume = transport.find_volume_name_by_id(rest_assign["volume_id"], volumes)
+        hg = transport.find_hg_name_by_id(rest_assign["hostgroup_id"], hgs)
         return {
-            :volume => rest_assign["vol"],
-            :hg   => rest_assign["hostgroup"],
-            :name   => "#{rest_assign["vol"]}/#{rest_assign["hg"]}",
+            :volume => volume,
+            :hg     => hg,
+            :name   => "#{volume}/#{hg}",
             :lun    => rest_assign["lun"],
             :ensure => :present
         }
@@ -36,15 +41,12 @@ Puppet::Type.type(:reduxio_volume_to_hg_assignment).provide(:posix, :parent => P
 
     def set_assign
         if @property_flush[:ensure] == :absent
-            transport(conn_info).unassign(parse_volume_name, hostgroup_name=parse_hg_name)
+            transport(conn_info).unassign(parse_volume_name, nil, hostgroup_name=parse_hg_name)
             return nil
         else
             assgn = transport(conn_info).find_assignment_by_hostgroup(parse_volume_name,parse_hg_name)
-            Puppet.debug("assgn=#{assgn}")
             if assgn == nil
-                Puppet.debug("inoam after find asgn=nil")
                 transport(conn_info).assign(vol_name=parse_volume_name, host_name=nil, hostgroup_name=parse_hg_name, lun=@resource[:lun])
-                Puppet.debug("inoam here")
             end
             return true
         end
@@ -52,7 +54,7 @@ Puppet::Type.type(:reduxio_volume_to_hg_assignment).provide(:posix, :parent => P
 
     def flush
         if set_assign
-            transport(conn_info).list_assignments(vol=parse_volume_name).each do |assign|
+            transport(conn_info).list_volume_to_hg_assignments(vol=parse_volume_name).each do |assign|
                 if assign["vol"] == parse_volume_name && assign["hostgroup"] == parse_hg_name
                     @property_hash = self.class.rest_asgn_to_puppet_asgn(assign)
                 end
