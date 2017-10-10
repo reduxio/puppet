@@ -5,7 +5,7 @@ Puppet::Type.newtype(:reduxio_history_policy) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'The name of the host group'
+    desc 'The name of the history policy'
   end
 
   newproperty(:is_default) do
