@@ -5,13 +5,13 @@ The module enables the user to create, modify and update volumes, hosts and assi
 
 Note: This module does not automate the configuration of the iSCSI initiator. This
 includes the configuration of iSCSI sessions, but also the Reduxio iSCSI best practices
-documented in the [Reduxio Support Portal] (https://support.reduxio.com "Reduxio Support Portal").
+documented in the [Reduxio Support Portal](https://support.reduxio.com "Reduxio Support Portal").
 These should be configured manually or using another Puppet module.
 
 ## Requirements
 
 1. Reduxio HX Series system running Reduxio TimeOS v3.3 or higher.
-2. ['rest-client' Ruby Gem] (https://github.com/rest-client/rest-client "'rest-client' Ruby Gem").
+2. ['rest-client' Ruby Gem](https://github.com/rest-client/rest-client "'rest-client' Ruby Gem").
 3. Puppet v3.6 or higher.
 
 ## Installation
