@@ -54,9 +54,14 @@ Puppet::Type.type(:reduxio_volume_to_hg_assignment).provide(:posix, :parent => P
 
     def flush
         if set_assign
-            transport(conn_info).list_volume_to_hg_assignments(vol=parse_volume_name).each do |assign|
-                if assign["vol"] == parse_volume_name && assign["hostgroup"] == parse_hg_name
-                    @property_hash = self.class.rest_asgn_to_puppet_asgn(assign)
+            tmp_transport = transport(conn_info)
+            hgs = tmp_transport.list_hgs
+            volumes = tmp_transport.list_volumes
+            tmp_transport.list_volume_to_hg_assignments(vol=parse_volume_name).each do |assign|
+                assign_hg_name = tmp_transport.find_hg_name_by_id(assign["hostgroup_id"], hgs)
+                assign_vol_name = tmp_transport.find_volume_name_by_id(assign["volume_id"], volumes)
+                if assign_vol_name == parse_volume_name && assign_hg_name == parse_hg_name
+                    @property_hash = self.class.rest_asgn_to_puppet_asgn(assign, hgs, volumes, tmp_transport)
                 end
             end
         end
