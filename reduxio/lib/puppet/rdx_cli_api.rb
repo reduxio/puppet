@@ -117,6 +117,13 @@ class RdxCliAPI
       return nil
     end
     
+    def find_hp_name_by_id(hp_id, hps)
+      hps.each do |hp|
+        return hp["name"] if hp["id"].to_s == hp_id.to_s
+      end
+      return nil
+    end
+    
     def update_volume(name, description=nil, size=nil, history_policy=nil)
         vol = find_volume_by_name(name)
         history_policy_id = vol["history_policy_id"]

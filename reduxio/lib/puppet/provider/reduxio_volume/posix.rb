@@ -9,17 +9,20 @@ Puppet::Type.type(:reduxio_volume).provide(:posix,
     mk_resource_methods
 
     def self.list_instances(conn_info = nil)
-        get_api([conn_info]).transport.list_volumes.each.collect do |vol|
-            new(rest_vol_to_puppet_vol(vol))
+        tmp_transport = get_api([conn_info]).transport
+        hps = tmp_transport.list_history_policies
+        tmp_transport.list_volumes.each.collect do |vol|
+            new(rest_vol_to_puppet_vol(vol, hps, tmp_transport))
         end
     end
 
-    def self.rest_vol_to_puppet_vol(rest_vol)
+    def self.rest_vol_to_puppet_vol(rest_vol, hps, tmp_transport)
+        hp = tmp_transport.find_hp_name_by_id(rest_vol["history_policy_id"], hps)
         return {
             :name               => rest_vol["name"],
             :size               => "#{rest_vol["size"]["size_in_bytes"] / 1024 / 1024 / 1024}",
             :description        => rest_vol["description"],
-            :history_policy     => rest_vol["history_policy_id"],
+            :history_policy     => hp,
             :blocksize          => "#{rest_vol["block_size"]}",
             :ensure             => :present
         }
@@ -58,7 +61,9 @@ Puppet::Type.type(:reduxio_volume).provide(:posix,
 
     def flush
         if set_volume
-            @property_hash = self.class.rest_vol_to_puppet_vol(transport(conn_info).find_volume_by_name(@resource[:name]))
+            tmp_transport = transport(conn_info)
+            hps = tmp_transport.list_history_policies
+            @property_hash = self.class.rest_vol_to_puppet_vol(transport(conn_info).find_volume_by_name(@resource[:name]), hps, tmp_transport)
         end
     end
 
