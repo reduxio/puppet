@@ -113,7 +113,7 @@ Reduxio_history_policy <| |> -> Reduxio_volume <| |> -> Reduxio_hg <| |> -> Redu
 
 ### API TOKEN
 Puppet plugin is using a Reduxio generated API Token.
-In order to create, go to https://reduxio_system_address/#/app/settings/api-tokens.
+To create a token, open this URL:  https://reduxio_system_address/#/app/settings/api-tokens.
 
 ### Updating objects
 Updating objects' attributes is supported, however as names are the unique identifiers of objects, changing objects names is not possible. 
